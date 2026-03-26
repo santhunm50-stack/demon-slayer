@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demon Slayer Ultimate Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(270deg,#000,#300,#000);background-size:600% 600%;animation:bgAnim 10s ease infinite;color:#fff;}
+@keyframes bgAnim{0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+header{text-align:center;padding:20px;font-size:2.2rem;background:rgba(0,0,0,0.7);color:#ff4d4d;}
+.container{max-width:700px;margin:30px auto;background:rgba(0,0,0,0.9);padding:25px;border-radius:15px;box-shadow:0 0 25px red;}
+.question{font-size:1.5rem;margin-bottom:10px;}
+img{width:100%;border-radius:10px;margin-bottom:15px;}
+.btn{display:block;width:100%;margin:10px 0;padding:12px;border:none;border-radius:10px;background:#ff4d4d;color:#fff;font-size:1rem;cursor:pointer;}
+.progress{height:10px;background:#333;border-radius:10px;margin:20px 0;}
+.progress-bar{height:10px;background:#ff4d4d;width:0%;border-radius:10px;}
+#timer{text-align:right;font-size:1.2rem;color:#ffcc00;}
+footer{text-align:center;margin-top:20px;color:#aaa;}
+</style>
+</head>
+<body>
+<header>🔥 Demon Slayer Quiz 🔥</header>
+<div class="container">
+<div id="timer">Time: 15</div>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+<img id="animeImg" src="https://picsum.photos/800/400" alt="anime">
+<div class="question" id="question">Loading...</div>
+<div id="answers"></div>
+</div>
+<footer>Website made by Santhu</footer>
+
+<script>
+const questions=[
+{q:"Who is Tanjiro's sister?",opts:["Nezuko","Shinobu","Kanao","Mitsuri"],ans:"Nezuko"},
+{q:"Zenitsu uses which breathing?",opts:["Thunder","Water","Fire","Wind"],ans:"Thunder"},
+{q:"Who is Flame Hashira?",opts:["Rengoku","Giyu","Sanemi","Obanai"],ans:"Rengoku"},
+{q:"Who trained Tanjiro?",opts:["Urokodaki","Kagaya","Akaza","Gyomei"],ans:"Urokodaki"},
+{q:"Main villain?",opts:["Muzan","Akaza","Doma","Gyutaro"],ans:"Muzan"},
+{q:"Inosuke wears what?",opts:["Boar mask","Fox mask","Crow mask","Demon mask"],ans:"Boar mask"},
+{q:"Water Hashira?",opts:["Giyu","Sanemi","Gyomei","Obanai"],ans:"Giyu"},
+{q:"Leader of Corps?",opts:["Kagaya","Tanjiro","Muzan","Akaza"],ans:"Kagaya"},
+{q:"Shinobu uses?",opts:["Poison","Fire","Water","Wind"],ans:"Poison"},
+{q:"Tanjiro breathing?",opts:["Water","Flame","Mist","Love"],ans:"Water"},
+{q:"Rengoku personality?",opts:["Energetic","Lazy","Silent","Angry"],ans:"Energetic"},
+{q:"Nezuko power?",opts:["Blood Demon Art","Water","Fire","Wind"],ans:"Blood Demon Art"},
+{q:"Zenitsu trait?",opts:["Coward","Brave","Calm","Leader"],ans:"Coward"},
+{q:"Inosuke weapon?",opts:["Dual swords","Bow","Gun","Stick"],ans:"Dual swords"},
+{q:"Giyu role?",opts:["Hashira","Demon","Villager","Trainer"],ans:"Hashira"},
+{q:"Akaza rank?",opts:["Upper Moon","Lower Moon","Hashira","Human"],ans:"Upper Moon"},
+{q:"Muzan goal?",opts:["Immortality","Power","Peace","Money"],ans:"Immortality"},
+{q:"Tanjiro smell skill?",opts:["Yes","No","Maybe","Unknown"],ans:"Yes"},
+{q:"Kanao uses?",opts:["Flower","Water","Flame","Wind"],ans:"Flower"},
+{q:"Sanemi uses?",opts:["Wind","Water","Stone","Love"],ans:"Wind"}
+];
+
+let index=0,score=0,time=15,timer;
+
+function startTimer(){
+  clearInterval(timer);
+  time=15;
+  document.getElementById('timer').innerText="Time: "+time;
+  timer=setInterval(()=>{
+    time--;
+    document.getElementById('timer').innerText="Time: "+time;
+    if(time<=0){nextQ();}
+  },1000);
+}
+
+function loadQ(){
+  startTimer();
+  let q=questions[index];
+
+  document.getElementById('question').innerText=q.q;
+
+  let shuffled=[...q.opts].sort(()=>Math.random()-0.5);
+
+  let ansHTML="";
+  shuffled.forEach(opt=>{
+    ansHTML+=`<button class='btn' onclick="check('${opt}')">${opt}</button>`;
+  });
+
+  document.getElementById('answers').innerHTML=ansHTML;
+  document.getElementById('progress').style.width=((index/questions.length)*100)+"%";
+}
+
+function check(ans){
+  if(ans===questions[index].ans){score++;}
+  nextQ();
+}
+
+function nextQ(){
+  index++;
+  if(index<questions.length){loadQ();}
+  else{endGame();}
+}
+
+function endGame(){
+  clearInterval(timer);
+  document.querySelector('.container').innerHTML=`
+  <h2>Finished!</h2>
+  <p>Score: ${score}/20</p>
+  <button class='btn' onclick='location.reload()'>Restart</button>
+  `;
+}
+
+loadQ();
+</script>
+</body>
+</html>
